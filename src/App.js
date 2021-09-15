@@ -1,32 +1,37 @@
-import React, {useState} from 'react';
+import React, { useState} from 'react';
 import './App.css';
 
 function App() {
 
   const [result, setResult] = useState("")
   const [operantion, setOperantion] = useState("")
+  const [text, setText] = useState("")
+  const [arr, setArr] = useState([]);
+
 
 
 
   const targetNumber = (e) => {
-    if(!result && e.target.id === ".") {return}
-
+    if(text.includes('.') && e.target.id === "."){return}
+    setText(text + e.target.id)
     setResult(result + e.target.id)
   }
 
-  const targetOperation = (e) => {
-    if(!result) {return}
 
-    if(operantion) {
-      setResult(countingTheResults() + e.target.name)
-      setOperantion(e.target.name)
-    } else {setResult(result + e.target.name)
-      setOperantion(e.target.name)}
+
+  const targetOperation = (e) => {
+    if((operantion && e.target.id === "operand") || !result) {return}
+    if(text) {arr.push(text)}
+    setText("")
+    setOperantion(e.target.name)
+    setResult(result + e.target.name )
   }
+
 
   const clearResult = () => {
     setResult("")
     setOperantion("")
+    setArr([])
   }
 
   const backspace = () => {
@@ -37,17 +42,19 @@ function App() {
     }
   }
 
+
   const outputOfTheResult = () => {
-        if(!result.split(operantion)[1]) {return}
-        setResult(countingTheResults)
-        setOperantion("")
+    if(text) {arr.push(text)}
+    if(arr.length < 2) {return}
 
+    setText("")
+    setResult(countingTheResults)
 
+    setArr([])
 
   }
 
   const countingTheResults = () => {
-    const arr = result.split(operantion)
     let results = 0
     switch (operantion) {
       case "-":
@@ -65,7 +72,6 @@ function App() {
       default:
         console.log("Err")
     }
-    console.log(results)
     return results.toString();
   }
 
